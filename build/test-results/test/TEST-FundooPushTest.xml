@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="FundooPushTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-12-30T09:47:06" hostname="FH400" time="3.035">
+<testsuite name="FundooPushTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-12-30T10:05:15" hostname="FH400" time="2.538">
   <properties/>
-  <testcase name="givenEmailIdAndPassword_OnRegister_ShouldReturnSuccessCode" classname="FundooPushTest" time="3.035"/>
+  <testcase name="givenEmailAndPassword_WhenCorrect_ShouldReturnSuccessCode" classname="FundooPushTest" time="2.538"/>
   <system-out><![CDATA[{
     "status": true,
-    "message": "Registered Successfully",
+    "message": "Logged in Successfully",
     "data": {
-        "_id": "5e09c79d4d22670032530f82",
-        "password": "$2b$10$wDGvnwesdb4cCpmKdPCkueXdlcWoVenritf1RQ7UXfA2qWVz8sTG6",
-        "email": "laxmanbhosale360@gmail.com",
-        "creator_stamp": "2019-12-30T09:47:09.680Z",
-        "update_stamp": "2019-12-30T09:47:09.680Z",
+        "_id": "5e0985c14d22670032530f13",
+        "email": "laxmanbhosale7374@gmail.com",
+        "password": "$2b$10$Mo6HonIkjsTOXPG.dtnQguHFwDKO0.AOsf2tA7mEYXLM0vT9NaKqa",
+        "creator_stamp": "2019-12-30T05:06:09.134Z",
+        "update_stamp": "2019-12-30T10:04:38.403Z",
         "__v": 0
-    }
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3MDAzMTcsImV4cCI6MTU3Nzc4NjcxN30.zz600gWWdrAAW17yrzgRPnR9pwdd-Lco2twra5sbhEY"
 }
+Status:true
+status code:200
+
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

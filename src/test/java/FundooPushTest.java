@@ -39,7 +39,6 @@ public class FundooPushTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("email", "laxmanbhosale360@gmail.com");
         jsonObject.put("password", "123456");
-
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(jsonObject.toJSONString())
@@ -51,6 +50,51 @@ public class FundooPushTest {
         String message = (String) object.get("message");
         Assert.assertEquals(201, code);
         Assert.assertTrue(status);
-        Assert.assertEquals("Registered Successfully",message);
+        Assert.assertEquals("Registered Successfully", message);
+    }
+
+    @Test
+    public void givenValidEmailIdAndInvalidPassword_ShouldReturnFalseStatusAndWrongStatusCode() throws ParseException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("email", "laxmanbhosale7374@gmail.com");
+        jsonObject.put("password", "12345");
+        Response response = RestAssured.given()
+                .body(jsonObject.toJSONString())
+                .when()
+                .contentType(ContentType.JSON)
+                .post("https://fundoopush-backend-dev.bridgelabz.com/login");
+        int code = response.statusCode();     ResponseBody body = response.getBody();
+        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+        System.out.println("Status:" + status);
+        System.out.println("status code:" + code);
+        System.out.println();
+        Assert.assertEquals(401, code);
+        Assert.assertFalse(status);
+        Assert.assertEquals("Wrong password", message);
+    }
+
+    @Test
+    public void givenInvalidEmailAndCorrectPassword_onLogin_ShouldReturnFalseAndWrongPasswordMessage() throws ParseException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("email", "laxmanbhosale7132@gmail.com");
+        jsonObject.put("password", "12345");
+        Response response = RestAssured.given()
+                .body(jsonObject.toJSONString())
+                .when()
+                .contentType(ContentType.JSON)
+                .post("https://fundoopush-backend-dev.bridgelabz.com/login");
+        int code = response.statusCode();     ResponseBody body = response.getBody();
+        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+        System.out.println("Status:" + status);
+        System.out.println("status code:" + code);
+        System.out.println();
+        Assert.assertEquals(401, code);
+        Assert.assertFalse(status);
+        Assert.assertEquals("Wrong password", message);
+
     }
 }
