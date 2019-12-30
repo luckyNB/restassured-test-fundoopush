@@ -1,16 +1,4 @@
 {
     "status": true,
-)    "message": "Logged in Successfully",
-    "data": {
-+        "_id": "5e0985c14d22670032530f13",
-0        "email": "laxmanbhosale7374@gmail.com",
-T        "password": "$2b$10$Mo6HonIkjsTOXPG.dtnQguHFwDKO0.AOsf2tA7mEYXLM0vT9NaKqa",
-5        "creator_stamp": "2019-12-30T05:06:09.134Z",
-4        "update_stamp": "2019-12-30T10:04:38.403Z",
-        "__v": 0
-    },
-È    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3MDAzMTcsImV4cCI6MTU3Nzc4NjcxN30.zz600gWWdrAAW17yrzgRPnR9pwdd-Lco2twra5sbhEY"
+9    "message": "Logged out successfully from the system"
 }
-Status:true
-status code:200
-

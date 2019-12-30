@@ -1,5 +1,6 @@
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import org.json.simple.JSONObject;
@@ -63,7 +64,8 @@ public class FundooPushTest {
                 .when()
                 .contentType(ContentType.JSON)
                 .post("https://fundoopush-backend-dev.bridgelabz.com/login");
-        int code = response.statusCode();     ResponseBody body = response.getBody();
+        int code = response.statusCode();
+        ResponseBody body = response.getBody();
         JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
@@ -85,7 +87,8 @@ public class FundooPushTest {
                 .when()
                 .contentType(ContentType.JSON)
                 .post("https://fundoopush-backend-dev.bridgelabz.com/login");
-        int code = response.statusCode();     ResponseBody body = response.getBody();
+        int code = response.statusCode();
+        ResponseBody body = response.getBody();
         JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
@@ -95,6 +98,24 @@ public class FundooPushTest {
         Assert.assertEquals(401, code);
         Assert.assertFalse(status);
         Assert.assertEquals("Wrong password", message);
+    }
+
+    @Test
+    public void givenToken_WhenLogoutFromSystem_ShouldReturnTrueAndSuccesMessage() throws ParseException {
+        Header header = new Header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc2ODI0OTMsImV4cCI6MTU3Nzc2ODg5M30.jh2CJZdfLQ47GLDzJ5HOCplljRcb9hmJ3V6-51US8Kk");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .header(header)
+                .post("https://fundoopush-backend-dev.bridgelabz.com/logout");
+        ResponseBody body = response.getBody();
+        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        int code = response.getStatusCode();
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+        Assert.assertTrue(status);
+        Assert.assertEquals(200, code);
+        Assert.assertEquals("Logged out successfully from the system", message);
+
 
     }
 }
