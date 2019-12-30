@@ -1,0 +1,12 @@
+{
+    "status": true,
+*    "message": "Registered Successfully",
+    "data": {
++        "_id": "5e09c79d4d22670032530f82",
+T        "password": "$2b$10$wDGvnwesdb4cCpmKdPCkueXdlcWoVenritf1RQ7UXfA2qWVz8sTG6",
+/        "email": "laxmanbhosale360@gmail.com",
+5        "creator_stamp": "2019-12-30T09:47:09.680Z",
+4        "update_stamp": "2019-12-30T09:47:09.680Z",
+        "__v": 0
+    }
+}

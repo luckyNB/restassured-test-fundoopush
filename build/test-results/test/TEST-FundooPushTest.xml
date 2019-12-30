@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="FundooPushTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-12-30T09:47:06" hostname="FH400" time="3.035">
+  <properties/>
+  <testcase name="givenEmailIdAndPassword_OnRegister_ShouldReturnSuccessCode" classname="FundooPushTest" time="3.035"/>
+  <system-out><![CDATA[{
+    "status": true,
+    "message": "Registered Successfully",
+    "data": {
+        "_id": "5e09c79d4d22670032530f82",
+        "password": "$2b$10$wDGvnwesdb4cCpmKdPCkueXdlcWoVenritf1RQ7UXfA2qWVz8sTG6",
+        "email": "laxmanbhosale360@gmail.com",
+        "creator_stamp": "2019-12-30T09:47:09.680Z",
+        "update_stamp": "2019-12-30T09:47:09.680Z",
+        "__v": 0
+    }
+}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
