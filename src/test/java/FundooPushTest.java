@@ -226,4 +226,81 @@ public class FundooPushTest {
         Assert.assertEquals("All Redirects retrieved Successfully", message);
         Assert.assertEquals(200, statusCode);
     }
+//Editing the hashtag as per as hashtag _id and adding new hashtag as per as redirect_id.
+
+    @Test
+    public void givenTokenAndHashtagBody_OnEdit_ShouldEditHshtag() throws ParseException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("redirect_id", "5e0ad95f4d2267003253101d");
+        jsonObject.put("hashtag", "#Bridgelabz #Automation #Laxman");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .body(jsonObject.toJSONString())
+                .post("https://fundoopush-backend-dev.bridgelabz.com/hashtag/edit");
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+        int statusCode = response.getStatusCode();
+        Assert.assertTrue(status);
+        Assert.assertEquals("Hashtag edit done Successfully", message);
+        Assert.assertEquals(200, statusCode);
+    }
+
+    @Test
+    public void givenTokenAndHashtagName_WhenCorrect_ShouldRedirectHashTag() throws ParseException {
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .pathParam("hashtagname", "#Laxman #Automationtest #fundoopush")
+                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .get("https://fundoopush-backend-dev.bridgelabz.com/redirects/hashtag/{hashtagname}");
+        ResponseBody body = response.getBody();
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+        int statusCode = response.getStatusCode();
+        Assert.assertEquals("Hashtag sent Successfully", message);
+        Assert.assertEquals(200, statusCode);
+        Assert.assertTrue(status);
+    }
+
+    @Test
+    public void givenTokenAndURLBody_WhenCorrect_ShouldCreateWebScrappingURL() throws ParseException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("url", "https://www.deccanchronicle.com/technology/in-other-news/270319/companies-that-are-changing-the-way-education-is-being-delivered-to-st.html");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .body(jsonObject.toJSONString())
+                .when()
+                .post("https://fundoopush-backend-dev.bridgelabz.com/web-scraping");
+        ResponseBody body = response.getBody();
+        int statusCode = response.getStatusCode();
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+        Assert.assertTrue(status);
+        Assert.assertEquals(200, statusCode);
+        Assert.assertEquals("Successfully scrapped data", message);
+    }
+
+    @Test
+    public void givenTokenAndHashTagBody_WhenCorrect_ShouldReturnSuccessMessage() throws ParseException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("hashtag", "#Laxman #Automationtest #fundoopush");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .body(jsonObject.toJSONString())
+                .when()
+                .post("https://fundoopush-backend-dev.bridgelabz.com/search/hashtag");
+        ResponseBody body = response.getBody();
+        JSONObject object = (JSONObject) new JSONParser().parse(body.print());
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+        int statusCode = response.getStatusCode();
+        Assert.assertEquals("Successfully searched data", message);
+        Assert.assertEquals(200, statusCode);
+        Assert.assertTrue(status);
+    }
 }
