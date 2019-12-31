@@ -303,4 +303,28 @@ public class FundooPushTest {
         Assert.assertEquals(200, statusCode);
         Assert.assertTrue(status);
     }
+
+    @Test
+    public void givenTokenAndJobData_WhenCorrect_ShouldPostJob() throws ParseException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("redirect_id", "5e0b39cf9dbe370032aa8cc8");
+        jsonObject.put("years_of_experience", 2);
+        jsonObject.put("salary", 3.6);
+        jsonObject.put("location", "Pune");
+        jsonObject.put("company_profile", "Automation Lead");
+        jsonObject.put("hashtag", "#bridgelabz #fun #awesome");
+        Response response = RestAssured.given()
+                .accept(ContentType.JSON)
+                .contentType(ContentType.HTML)
+                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .body(jsonObject.toJSONString())
+                .post("https://fundoopush-backend-dev.bridgelabz.com/jobs");
+        ResponseBody body = response.getBody();
+        int statusCode = response.getStatusCode();
+        JSONObject object = (JSONObject) new JSONParser().parse(body.print());
+        boolean status = (boolean) object.get("status");
+        String message = (String) object.get("message");
+      //  Assert.assertTrue(status);
+        Assert.assertEquals(200, statusCode);
+    }
 }
