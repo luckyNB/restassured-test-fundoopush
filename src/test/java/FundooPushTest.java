@@ -3,15 +3,36 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
+import org.apache.http.HttpStatus;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 
 public class FundooPushTest {
+    public static String tokenValue = null;
+
+    @Before
+    public void setUp() throws ParseException {
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("email","laxmanbhosale7374@gmail.com");
+        jsonObject.put("password","123456");
+       Response response= RestAssured.given()
+                .accept(ContentType.JSON)
+                .body(jsonObject.toJSONString())
+                .post("https://fundoopush-backend-dev.bridgelabz.com/login");
+        String body = response.getBody().asString();
+        JSONObject object= (JSONObject) new JSONParser().parse(body);
+        String token = (String) object.get("token");
+
+        tokenValue = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc5NDg1ODIsImV4cCI6MTU3ODAzNDk4Mn0.u314H7sfMIowKYz0dSIK4QWa3jPY1QfT3xYtjFDa3jg";
+    }
 
     @Test
     public void givenEmailAndPassword_WhenCorrect_ShouldReturnSuccessCode() throws ParseException {
@@ -94,7 +115,7 @@ public class FundooPushTest {
 
     @Test
     public void givenToken_WhenLogoutFromSystem_ShouldReturnTrueAndSuccesMessage() throws ParseException {
-        Header header = new Header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc2ODI0OTMsImV4cCI6MTU3Nzc2ODg5M30.jh2CJZdfLQ47GLDzJ5HOCplljRcb9hmJ3V6-51US8Kk");
+        Header header = new Header("token", tokenValue);
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .header(header)
@@ -118,7 +139,7 @@ public class FundooPushTest {
         jsonObject.put("new_password", "abcd1234");
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header(new Header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc2ODI0OTMsImV4cCI6MTU3Nzc2ODg5M30.jh2CJZdfLQ47GLDzJ5HOCplljRcb9hmJ3V6-51US8Kk"))
+                .header(new Header("token", tokenValue))
                 .body(jsonObject.toJSONString())
                 .post("https://fundoopush-backend-dev.bridgelabz.com/account/change-password");
         ResponseBody body = response.getBody();
@@ -136,7 +157,7 @@ public class FundooPushTest {
         File testUploadFile = new File("/home/user/Pictures/Screenshot from 2019-06-14 10-37-20.png");
         Response response = RestAssured.given()
                 .accept(ContentType.JSON)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .multiPart("image", testUploadFile)
                 .formParam("title", "ganeshji")
                 .formParam("description", "goddemo ganesh")
@@ -163,7 +184,7 @@ public class FundooPushTest {
         Response response = RestAssured.given()
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .when()
                 .get("https://fundoopush-backend-dev.bridgelabz.com/redirects");
         int statusCode = response.getStatusCode();
@@ -182,7 +203,7 @@ public class FundooPushTest {
         Response response = RestAssured.given()
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .formParam("_id", "5e0acf3f4d22670032531002")
                 .multiPart("image", testUploadFile)
                 .formParam("title", "Laxmans File")
@@ -204,7 +225,7 @@ public class FundooPushTest {
         Response response = RestAssured.given()
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .body(jsonObject.toJSONString())
                 .post("https://fundoopush-backend-dev.bridgelabz.com/redirects/delete");
         int statusCode = response.getStatusCode();
@@ -219,7 +240,7 @@ public class FundooPushTest {
     public void getAllRedirectsBridgelabzWebsitesPosts() throws ParseException {
         Response response = RestAssured.given().get("https://fundoopush-backend-dev.bridgelabz.com/bl-redirects");
         int statusCode = response.getStatusCode();
-        JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody().print());
+        JSONObject jsonObject = (JSONObject) new JSONParser().parse(response.getBody().asString());
         boolean status = (boolean) jsonObject.get("status");
         String message = (String) jsonObject.get("message");
         Assert.assertTrue(status);
@@ -235,8 +256,8 @@ public class FundooPushTest {
         jsonObject.put("hashtag", "#Bridgelabz #Automation #Laxman");
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
                 .body(jsonObject.toJSONString())
+                .header("token", tokenValue)
                 .post("https://fundoopush-backend-dev.bridgelabz.com/hashtag/edit");
         JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
         boolean status = (boolean) object.get("status");
@@ -252,7 +273,7 @@ public class FundooPushTest {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .pathParam("hashtagname", "#Laxman #Automationtest #fundoopush")
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .get("https://fundoopush-backend-dev.bridgelabz.com/redirects/hashtag/{hashtagname}");
         ResponseBody body = response.getBody();
         JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
@@ -270,7 +291,7 @@ public class FundooPushTest {
         jsonObject.put("url", "https://www.deccanchronicle.com/technology/in-other-news/270319/companies-that-are-changing-the-way-education-is-being-delivered-to-st.html");
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .body(jsonObject.toJSONString())
                 .when()
                 .post("https://fundoopush-backend-dev.bridgelabz.com/web-scraping");
@@ -290,7 +311,7 @@ public class FundooPushTest {
         jsonObject.put("hashtag", "#Laxman #Automationtest #fundoopush");
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .body(jsonObject.toJSONString())
                 .when()
                 .post("https://fundoopush-backend-dev.bridgelabz.com/search/hashtag");
@@ -307,24 +328,59 @@ public class FundooPushTest {
     @Test
     public void givenTokenAndJobData_WhenCorrect_ShouldPostJob() throws ParseException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("redirect_id", "5e0b39cf9dbe370032aa8cc8");
+        jsonObject.put("redirect_id", "5d41270b0d205f00a7687cbd");
         jsonObject.put("years_of_experience", 2);
         jsonObject.put("salary", 3.6);
         jsonObject.put("location", "Pune");
-        jsonObject.put("company_profile", "Automation Lead");
-        jsonObject.put("hashtag", "#bridgelabz #fun #awesome");
+        jsonObject.put("company_profile", "Automation");
         Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .contentType(ContentType.HTML)
-                .header("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc3NjUyNDEsImV4cCI6MTU3Nzg1MTY0MX0.Fv5utpMpzuowrqZT9i4TQzNjEPFyY5JvLSHZLKAZmGU")
+                .header("token", tokenValue)
                 .body(jsonObject.toJSONString())
+                .when()
                 .post("https://fundoopush-backend-dev.bridgelabz.com/jobs");
+        int status = response.getStatusCode();
+        String string = response.asString();
+        System.out.println(string);
+        MatcherAssert.assertThat(status, Matchers.equalTo(HttpStatus.SC_OK));
         ResponseBody body = response.getBody();
-        int statusCode = response.getStatusCode();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.print());
-        boolean status = (boolean) object.get("status");
-        String message = (String) object.get("message");
-      //  Assert.assertTrue(status);
-        Assert.assertEquals(200, statusCode);
+    }
+
+
+    @Test
+    public void givenJobIdAndHashtagName_WhenCorrect_ShouldAddHashtagForJob() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("job_id", "5e0d88aa3b17ce008e85dc26");
+        jsonObject.put("hashtag", "#Bridgelabz #Nanded #Pune");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("token", tokenValue)
+                .body(jsonObject.toJSONString())
+                .when()
+                .post("https://fundoopush-backend-dev.bridgelabz.com/jobs/hashtag/add");
+        int status = response.getStatusCode();
+        String string = response.asString();
+        System.out.println(string);
+        MatcherAssert.assertThat(status, Matchers.equalTo(HttpStatus.SC_OK));
+    }
+
+    @Test
+    public void givenJobIdAndHashtagId_WhenCorrect_ShouldRemoveTheHashtagFromExistingJob() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("job_id", "5e0d96353b17ce008e85dc65");
+        jsonObject.put("hashtag_id", "5d41270b0d205f00a7687cc0");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("token", tokenValue)
+                .body(jsonObject.toJSONString())
+                .when()
+                .post("https://fundoopush-backend-dev.bridgelabz.com/jobs/hashtag/remove");
+        int status = response.getStatusCode();
+        String string = response.asString();
+        System.out.println(string);
+        MatcherAssert.assertThat(status, Matchers.equalTo(HttpStatus.SC_OK));
     }
 }
