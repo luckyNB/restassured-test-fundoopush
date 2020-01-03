@@ -20,18 +20,18 @@ public class FundooPushTest {
 
     @Before
     public void setUp() throws ParseException {
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("email","laxmanbhosale7374@gmail.com");
-        jsonObject.put("password","123456");
-       Response response= RestAssured.given()
-                .accept(ContentType.JSON)
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("email", "laxmanbhosale7374@gmail.com");
+        jsonObject.put("password", "123456");
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
                 .body(jsonObject.toJSONString())
+                .when()
                 .post("https://fundoopush-backend-dev.bridgelabz.com/login");
         String body = response.getBody().asString();
-        JSONObject object= (JSONObject) new JSONParser().parse(body);
+        JSONObject object = (JSONObject) new JSONParser().parse(body);
         String token = (String) object.get("token");
-
-        tokenValue = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjVlMDk4NWMxNGQyMjY3MDAzMjUzMGYxMyJ9LCJpYXQiOjE1Nzc5NDg1ODIsImV4cCI6MTU3ODAzNDk4Mn0.u314H7sfMIowKYz0dSIK4QWa3jPY1QfT3xYtjFDa3jg";
+        tokenValue = token;
     }
 
     @Test
@@ -46,7 +46,7 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/login");
         int code = response.statusCode();
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         Assert.assertEquals(200, code);
@@ -65,7 +65,7 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/registration");
         int code = response.getStatusCode();
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         Assert.assertEquals(201, code);
@@ -85,7 +85,7 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/login");
         int code = response.statusCode();
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         Assert.assertEquals(401, code);
@@ -105,7 +105,7 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/login");
         int code = response.statusCode();
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         Assert.assertEquals(401, code);
@@ -121,7 +121,7 @@ public class FundooPushTest {
                 .header(header)
                 .post("https://fundoopush-backend-dev.bridgelabz.com/logout");
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         int code = response.getStatusCode();
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
@@ -143,10 +143,9 @@ public class FundooPushTest {
                 .body(jsonObject.toJSONString())
                 .post("https://fundoopush-backend-dev.bridgelabz.com/account/change-password");
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
-        System.out.println(status + "    " + message);
         int code = response.getStatusCode();
         Assert.assertEquals(200, code);
     }
@@ -170,7 +169,7 @@ public class FundooPushTest {
                 .when()
                 .post("https://fundoopush-backend-dev.bridgelabz.com/redirects");
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse((body.print()));
+        JSONObject object = (JSONObject) new JSONParser().parse((body.asString()));
         int statusCode = response.getStatusCode();
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
@@ -189,7 +188,7 @@ public class FundooPushTest {
                 .get("https://fundoopush-backend-dev.bridgelabz.com/redirects");
         int statusCode = response.getStatusCode();
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.prettyPrint());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         Assert.assertTrue(status);
@@ -209,7 +208,7 @@ public class FundooPushTest {
                 .formParam("title", "Laxmans File")
                 .formParam("description", "Update new file to existing file")
                 .put("https://fundoopush-backend-dev.bridgelabz.com/redirects");
-        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         int statusCode = response.getStatusCode();
@@ -229,7 +228,7 @@ public class FundooPushTest {
                 .body(jsonObject.toJSONString())
                 .post("https://fundoopush-backend-dev.bridgelabz.com/redirects/delete");
         int statusCode = response.getStatusCode();
-        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         Assert.assertEquals("Redirect deleted Successfully", message);
@@ -259,7 +258,7 @@ public class FundooPushTest {
                 .body(jsonObject.toJSONString())
                 .header("token", tokenValue)
                 .post("https://fundoopush-backend-dev.bridgelabz.com/hashtag/edit");
-        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         int statusCode = response.getStatusCode();
@@ -276,10 +275,11 @@ public class FundooPushTest {
                 .header("token", tokenValue)
                 .get("https://fundoopush-backend-dev.bridgelabz.com/redirects/hashtag/{hashtagname}");
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         int statusCode = response.getStatusCode();
+
         Assert.assertEquals("Hashtag sent Successfully", message);
         Assert.assertEquals(200, statusCode);
         Assert.assertTrue(status);
@@ -297,7 +297,7 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/web-scraping");
         ResponseBody body = response.getBody();
         int statusCode = response.getStatusCode();
-        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().print());
+        JSONObject object = (JSONObject) new JSONParser().parse(response.getBody().asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         Assert.assertTrue(status);
@@ -316,7 +316,7 @@ public class FundooPushTest {
                 .when()
                 .post("https://fundoopush-backend-dev.bridgelabz.com/search/hashtag");
         ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.print());
+        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
         boolean status = (boolean) object.get("status");
         String message = (String) object.get("message");
         int statusCode = response.getStatusCode();
@@ -328,11 +328,11 @@ public class FundooPushTest {
     @Test
     public void givenTokenAndJobData_WhenCorrect_ShouldPostJob() throws ParseException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("redirect_id", "5d41270b0d205f00a7687cbd");
-        jsonObject.put("years_of_experience", 2);
-        jsonObject.put("salary", 3.6);
-        jsonObject.put("location", "Pune");
-        jsonObject.put("company_profile", "Automation");
+        jsonObject.put("redirect_id", "5e09e5a64d22670032530fe7");
+        jsonObject.put("years_of_experience", "23");
+        jsonObject.put("salary", 3.66);
+        jsonObject.put("location", "13Pune");
+        jsonObject.put("company_profile", "13Automation");
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
@@ -342,13 +342,11 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/jobs");
         int status = response.getStatusCode();
         String string = response.asString();
-        System.out.println(string);
         MatcherAssert.assertThat(status, Matchers.equalTo(HttpStatus.SC_OK));
         ResponseBody body = response.getBody();
     }
 
-
-    @Test
+  @Test
     public void givenJobIdAndHashtagName_WhenCorrect_ShouldAddHashtagForJob() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("job_id", "5e0d88aa3b17ce008e85dc26");
@@ -362,7 +360,6 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/jobs/hashtag/add");
         int status = response.getStatusCode();
         String string = response.asString();
-        System.out.println(string);
         MatcherAssert.assertThat(status, Matchers.equalTo(HttpStatus.SC_OK));
     }
 
@@ -380,7 +377,6 @@ public class FundooPushTest {
                 .post("https://fundoopush-backend-dev.bridgelabz.com/jobs/hashtag/remove");
         int status = response.getStatusCode();
         String string = response.asString();
-        System.out.println(string);
         MatcherAssert.assertThat(status, Matchers.equalTo(HttpStatus.SC_OK));
     }
 }
