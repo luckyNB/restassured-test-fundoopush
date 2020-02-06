@@ -15,6 +15,8 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static org.hamcrest.core.IsEqual.equalTo;
+
 public class FundooPushTest {
     public static String tokenValue = null;
 
@@ -32,6 +34,7 @@ public class FundooPushTest {
         JSONObject object = (JSONObject) new JSONParser().parse(body);
         String token = (String) object.get("token");
         tokenValue = token;
+        RestAssured.baseURI = "https://fundoopush-backend-dev.bridgelabz.com";
     }
 
     @Test
@@ -43,34 +46,26 @@ public class FundooPushTest {
                 .body(jsonObject.toJSONString())
                 .when()
                 .contentType(ContentType.JSON)
-                .post("https://fundoopush-backend-dev.bridgelabz.com/login");
-        int code = response.statusCode();
-        ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
-        boolean status = (boolean) object.get("status");
-        String message = (String) object.get("message");
-        Assert.assertEquals(200, code);
-        Assert.assertTrue(status);
-        Assert.assertEquals("Logged in Successfully", message);
+                .post("/login");
+        response.then().assertThat().statusCode(200);
+        response.then().body("status", equalTo(true));
+        response.then().body("message", equalTo("Logged in Successfully"));
+
     }
 
     @Test
     public void givenEmailIdAndPassword_OnRegister_ShouldReturnSuccessCode() throws ParseException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("email", "laxmanbhosale360@gmail.com");
+        jsonObject.put("email", "laxmanbhosale007@gmail.com");
         jsonObject.put("password", "123456");
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(jsonObject.toJSONString())
                 .post("https://fundoopush-backend-dev.bridgelabz.com/registration");
-        int code = response.getStatusCode();
-        ResponseBody body = response.getBody();
-        JSONObject object = (JSONObject) new JSONParser().parse(body.asString());
-        boolean status = (boolean) object.get("status");
-        String message = (String) object.get("message");
-        Assert.assertEquals(201, code);
-        Assert.assertTrue(status);
-        Assert.assertEquals("Registered Successfully", message);
+        response.prettyPrint();
+        response.then().body("status", equalTo(true));
+        response.then().body("message", equalTo("Registered Successfully"));
+        response.then().statusCode(201);
     }
 
     @Test
@@ -346,7 +341,7 @@ public class FundooPushTest {
         ResponseBody body = response.getBody();
     }
 
-  @Test
+    @Test
     public void givenJobIdAndHashtagName_WhenCorrect_ShouldAddHashtagForJob() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("job_id", "5e0d88aa3b17ce008e85dc26");
